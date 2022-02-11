@@ -1,16 +1,19 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { FileElement } from 'src/app/models/file-element.model';
+import { NewFolderDialogComponent } from '../dialogs/new-folder-dialog/new-folder-dialog.component';
+import { RenameDialogComponent } from '../dialogs/rename-dialog/rename-dialog.component';
 
 @Component({
-  selector: 'app-file-explorer',
+  selector: 'file-explorer',
   templateUrl: './file-explorer.component.html',
   styleUrls: ['./file-explorer.component.scss']
 })
 export class FileExplorerComponent implements OnInit {
   
   @Input() fileElements: FileElement[] = [];
-  @Input() canNavigateUp: string = "";
+  @Input() canNavigateUp: boolean = false;
   @Input() path: string = "";
   
   @Output() folderAdded = new EventEmitter<{ name: string }>();
@@ -23,7 +26,7 @@ export class FileExplorerComponent implements OnInit {
   @Output() navigatedDown = new EventEmitter<FileElement>();
   @Output() navigatedUp = new EventEmitter();
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
@@ -47,15 +50,27 @@ export class FileExplorerComponent implements OnInit {
   }
 
   openNewFolderDialog() {
-
+    let dialogRef = this.dialog.open(NewFolderDialogComponent);
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        this.folderAdded.emit({ name: res });
+      }
+    });
   }
 
   openRenameDialog(element: FileElement) {
-
+    let dialogRef = this.dialog.open(RenameDialogComponent);
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        element.name = res;
+        this.elementRenamed.emit(element);
+      }
+    });
   }
 
   openMenu(event: MouseEvent, viewChild: MatMenuTrigger) {
-
+    event.preventDefault();
+    viewChild.openMenu();
   }
 
 }

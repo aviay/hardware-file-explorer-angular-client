@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./new-folder-dialog.component.scss']
 })
 export class NewFolderDialogComponent implements OnInit {
+  public folderName : string = "";
 
   constructor() { }
 

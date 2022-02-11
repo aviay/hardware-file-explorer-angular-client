@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class FileElement {\n  constructor() {\n    this.id = \"\";\n    this.isFolder = false;\n    this.name = \"\";\n    this.parent = \"\";\n  }\n\n}","map":null,"metadata":{},"sourceType":"module"}
